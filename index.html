@@ -3,88 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube + Descarga Directa</title>
+    <title>YouTube + Descarga REAL</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
-        input { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        button { background: #ff0000; color: white; padding: 15px 30px; border: none; border-radius: 8px; cursor: pointer; margin: 15px 5px; font-size: 16px; }
-        button:hover { background: #cc0000; }
-        iframe { width: 100%; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .options { background: #f0f8ff; padding: 20px; border-radius: 12px; margin: 20px 0; }
-        .download-btn { display: inline-block; margin: 10px; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; transition: transform 0.2s; }
+        body { font-family: Arial; max-width: 900px; margin: 0 auto; padding: 20px; }
+        input { width: 100%; padding: 15px; font-size: 16px; border: 2px solid #ddd; border-radius: 8px; }
+        .btn { padding: 12px 24px; margin: 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; }
+        .load { background: #ff0000; color: white; }
         .mp4 { background: #28a745; color: white; }
         .mp3 { background: #ffc107; color: black; }
-        .m3u8 { background: #17a2b8; color: white; }
-        .download-btn:hover { transform: scale(1.05); }
+        .ss { background: #007bff; color: white; }
+        iframe { width: 100%; height: 450px; border-radius: 10px; }
+        .working { background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0; }
     </style>
 </head>
 <body>
-    <h1>🎥 YouTube Viewer + Descarga DIRECTA</h1>
+    <h1>🎥 YouTube + Descarga que SÍ FUNCIONA</h1>
     
-    <input type="text" id="youtubeUrl" placeholder="Pega URL de YouTube (ej: https://www.youtube.com/watch?v=dQw4w9WgXcQ)" />
+    <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ" />
     <br>
-    <button onclick="cargarVideo()">▶️ Cargar Video</button>
+    <button class="btn load" onclick="loadVideo()">▶️ Cargar Video</button>
 
     <div id="player"></div>
     
-    <div id="downloads" class="options" style="display: none;">
-        <h3>📥 Opciones de Descarga REAL (sin extensiones):</h3>
-        <div>
-            <a id="mp4link" class="download-btn mp4" href="#" download>📹 MP4 720p</a>
-            <a id="mp3link" class="download-btn mp3" href="#" download>🎵 MP3 Audio</a>
+    <div id="downloader" style="display:none;">
+        <div class="working">
+            <h3>✅ COPIA CUALQUIER ENLACE ARRIBA y ve a:</h3>
+            <a href="#" class="btn ss" onclick="goTo('https://ssyoutube.com', event)">savefrom.net</a>
+            <a href="#" class="btn ss" onclick="goTo('https://y2mate.is', event)">y2mate.com</a>
+            <a href="#" class="btn ss" onclick="goTo('https://yt1s.com', event)">yt1s.com</a>
         </div>
-        <div>
-            <a id="m3u8link" class="download-btn m3u8" href="#" target="_blank">🔗 HLS Stream (VLC)</a>
-        </div>
-        <small>MP4/MP3: Copia enlaces en <a href="https://savefrom.net" target="_blank">savefrom.net</a> | Stream: Abre en VLC</small>
+        
+        <h4>📱 MÓVIL - Abre esta URL en nueva pestaña:</h4>
+        <p><strong id="mobileUrl"></strong></p>
     </div>
 
     <script>
-        function extraerID(url) {
-            const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
-            return url.match(regex)?.[1] || null;
+        function loadVideo() {
+            const url = document.getElementById('url').value;
+            const videoId = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/)?.[1];
+            
+            if (!videoId) return alert('❌ URL inválida');
+            
+            document.getElementById('player').innerHTML = 
+                `<iframe src="https://www.youtube.com/embed/${videoId}?controls=1" allowfullscreen></iframe>`;
+            
+            document.getElementById('downloader').style.display = 'block';
+            document.getElementById('mobileUrl').textContent = `https://www.youtube.com/watch?v=${videoId}`;
         }
         
-        function generarEnlaces(videoID) {
-            return {
-                mp4: `https://www.youtube.com/watch?v=${videoID}`,
-                mp3: `https://www.youtube.com/watch?v=${videoID}`,
-                m3u8: `https://youtube.com/get_video_info?video_id=${videoID}`
-            };
+        function goTo(url, event) {
+            event.preventDefault();
+            const videoUrl = document.getElementById('url').value;
+            window.open(url + '/?url=' + encodeURIComponent(videoUrl), '_blank');
         }
         
-        function cargarVideo() {
-            const url = document.getElementById('youtubeUrl').value.trim();
-            const videoID = extraerID(url);
-            
-            if (!videoID) {
-                alert('❌ URL inválida. Usa formato: youtube.com/watch?v=ID o youtu.be/ID');
-                return;
-            }
-            
-            // YouTube Player
-            document.getElementById('player').innerHTML = `
-                <iframe src="https://www.youtube.com/embed/${videoID}?autoplay=0&controls=1" 
-                        title="YouTube Player" 
-                        allowfullscreen 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
-                </iframe>
-            `;
-            
-            // Enlaces de descarga
-            const enlaces = generarEnlaces(videoID);
-            document.getElementById('mp4link').href = enlaces.mp4;
-            document.getElementById('mp3link').href = enlaces.mp3;
-            document.getElementById('m3u8link').href = enlaces.m3u8;
-            document.getElementById('downloads').style.display = 'block';
-            
-            // Scroll suave
-            document.getElementById('player').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Enter para cargar
-        document.getElementById('youtubeUrl').addEventListener('keypress', e => {
-            if (e.key === 'Enter') cargarVideo();
+        document.getElementById('url').addEventListener('keypress', e => {
+            if (e.key === 'Enter') loadVideo();
         });
     </script>
 </body>
