@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Video</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        video { max-width: 100%; height: auto; border: 2px solid #ccc; }
+        a { display: inline-block; margin-top: 20px; padding: 15px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+        a:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Mi Video</h1>
+    <video width="800" height="450" controls preload="metadata">
+        <source src="mi-video.mp4" type="video/mp4">
+        Tu navegador no soporta el elemento <video>. <a href="mi-video.mp4" download>Descárgalo aquí</a>.
+    </video>
+    <p>
+        <a href="mi-video.mp4" download="mi-video.mp4">
+            ?? Descargar Video (MP4)
+        </a>
+    </p>
+</body>
+</html>
