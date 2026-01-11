@@ -3,24 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descargar Video</title>
+    <title>YouTube Viewer + Descarga</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        video { max-width: 100%; height: auto; border: 2px solid #ccc; }
-        a { display: inline-block; margin-top: 20px; padding: 15px 30px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
-        a:hover { background: #0056b3; }
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; }
+        input[type="text"] { width: 100%; padding: 12px; font-size: 16px; border: 2px solid #ddd; border-radius: 5px; }
+        button { background: #ff0000; color: white; padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; }
+        button:hover { background: #cc0000; }
+        iframe { width: 100%; height: 500px; border: none; border-radius: 10px; }
+        .download-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .warning { color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
-    <h1>Mi Video</h1>
-    <video width="800" height="450" controls preload="metadata">
-        <source src="mi-video.mp4" type="video/mp4">
-        Tu navegador no soporta el elemento <video>. <a href="mi-video.mp4" download>Desc�rgalo aqu�</a>.
-    </video>
-    <p>
-        <a href="mi-video.mp4" download="mi-video.mp4">
-            ?? Descargar Video (MP4)
-        </a>
-    </p>
+    <h1>🎥 YouTube Viewer + Descargar</h1>
+    
+    <input type="text" id="youtubeUrl" placeholder="Pega aquí la URL de YouTube (ej: https://www.youtube.com/watch?v=ABC123)" />
+    
+    <button onclick="cargarVideo()">Cargar Video</button>
+    
+    <div id="player"></div>
+    
+    <div id="download-section" class="download-section" style="display: none;">
+        <h3>📥 Descargar</h3>
+        <p>Enlace directo al video (usa IDM, browser extension o youtube-dl):</p>
+        <a id="downloadLink" href="#" download class="download-btn" style="display: inline-block; background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">Descargar MP4</a>
+        <div class="warning">Nota: Descarga directa requiere herramientas externas. YouTube limita descargas directas por derechos de autor.</div>
+    </div>
+
+    <script>
+        function extraerID(url) {
+            const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        function cargarVideo() {
+            const url = document.getElementById('youtubeUrl').value;
+            const videoID = extraerID(url);
+            
+            if (!videoID) {
+                alert('URL de YouTube inválida');
+                return;
+            }
+            
+            const player = document.getElementById('player');
+            player.innerHTML = `
+                <iframe 
+                    src="https://www.youtube.com/embed/${videoID}?autoplay=0&controls=1" 
+                    title="YouTube video" 
+                    allowfullscreen 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                </iframe>
+            `;
+            
+            const downloadSection = document.getElementById('download-section');
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = `https://www.youtube.com/watch?v=${videoID}`;
+            downloadSection.style.display = 'block';
+            
+            // Scroll suave al player
+            player.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Enter para cargar
+        document.getElementById('youtubeUrl').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') cargarVideo();
+        });
+    </script>
 </body>
 </html>
